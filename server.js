@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 const { Pool } = require('pg');
 
 const app = express();
@@ -17,6 +18,10 @@ const validTimes = new Set(Array.from({ length: 11 }, (_, index) => {
 
 app.use(express.json());
 app.use(express.static(__dirname));
+
+app.get('/', (request, response) => {
+    response.sendFile(path.join(__dirname, 'diarti.html'));
+});
 
 async function initializeDatabase() {
     if (!pool) {
