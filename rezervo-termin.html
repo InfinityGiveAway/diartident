@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rezervo Termin | Diarti Dent</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #16b8a6;
+            --primary-dark: #087f82;
+            --coral: #ff7b72;
+            --gold: #ffc857;
+            --dark: #123b4a;
+            --text: #55717b;
+            --light: #f3fbfb;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            min-height: 100vh;
+            padding: 32px 20px;
+            color: var(--text);
+            background: linear-gradient(135deg, #e8fafa, #fff7ed);
+            font-family: 'DM Sans', sans-serif;
+        }
+        .booking-page { max-width: 760px; margin: 0 auto; }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 22px;
+            color: var(--primary-dark);
+            font-weight: 700;
+            text-decoration: none;
+        }
+        .back-link:hover { color: var(--coral); }
+        .booking-card {
+            padding: clamp(28px, 5vw, 52px);
+            background: white;
+            border: 1px solid rgba(22, 184, 166, 0.15);
+            border-radius: 26px;
+            box-shadow: 0 20px 55px rgba(18, 59, 74, 0.12);
+        }
+        h1, h2 { color: var(--dark); font-family: 'Playfair Display', serif; }
+        h1 { margin-bottom: 10px; font-size: clamp(2.2rem, 5vw, 3.5rem); }
+        .intro { margin-bottom: 34px; }
+        .booking-section { margin-top: 30px; }
+        h2 { margin-bottom: 15px; font-size: 1.35rem; }
+        .day-list, .time-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(125px, 1fr));
+            gap: 10px;
+        }
+        .choice {
+            position: relative;
+        }
+        .choice input {
+            position: absolute;
+            opacity: 0;
+        }
+        .choice label {
+            display: block;
+            padding: 13px 10px;
+            color: var(--dark);
+            border: 1px solid #d5e9e7;
+            border-radius: 12px;
+            text-align: center;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+        .choice label:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+        .choice input:checked + label {
+            color: white;
+            border-color: var(--primary-dark);
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            box-shadow: 0 8px 18px rgba(22, 184, 166, 0.25);
+        }
+        .details {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+        .field { display: flex; flex-direction: column; gap: 7px; }
+        .field.full { grid-column: 1 / -1; }
+        .field label { color: var(--dark); font-weight: 700; }
+        .field input, .field textarea {
+            width: 100%;
+            padding: 13px 14px;
+            border: 1px solid #d5e9e7;
+            border-radius: 10px;
+            color: var(--dark);
+            font: inherit;
+        }
+        .field textarea { min-height: 90px; resize: vertical; }
+        .field input:focus, .field textarea:focus {
+            outline: 2px solid rgba(22, 184, 166, 0.25);
+            border-color: var(--primary);
+        }
+        .submit-button {
+            width: 100%;
+            margin-top: 32px;
+            padding: 15px 24px;
+            color: white;
+            border: 0;
+            border-radius: 999px;
+            background: linear-gradient(135deg, var(--coral), #ff9a62);
+            font: inherit;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 10px 24px rgba(255, 123, 114, 0.3);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .submit-button:hover { transform: translateY(-2px); box-shadow: 0 14px 28px rgba(255, 123, 114, 0.4); }
+        .confirmation {
+            display: none;
+            margin-top: 22px;
+            padding: 16px;
+            color: #075d61;
+            border-radius: 12px;
+            background: #e4faf5;
+            font-weight: 600;
+        }
+        .confirmation.visible { display: block; }
+        @media (max-width: 560px) {
+            body { padding: 20px 14px; }
+            .details { grid-template-columns: 1fr; }
+            .field.full { grid-column: auto; }
+        }
+    </style>
+</head>
+<body>
+    <main class="booking-page">
+        <a class="back-link" href="diarti.html">← Kthehu te Diarti Dent</a>
+        <section class="booking-card">
+            <h1>Rezervo terminin</h1>
+            <p class="intro">Zgjidhni ditën dhe orarin që ju përshtatet. Jemi të hapur nga e hëna deri të shtunën, 09:00–20:00.</p>
+
+            <form id="booking-form">
+                <div class="booking-section">
+                    <h2>1. Zgjidhni ditën</h2>
+                    <div class="day-list">
+                        <div class="choice"><input required type="radio" id="monday" name="day" value="E Hënë"><label for="monday">E Hënë</label></div>
+                        <div class="choice"><input type="radio" id="tuesday" name="day" value="E Martë"><label for="tuesday">E Martë</label></div>
+                        <div class="choice"><input type="radio" id="wednesday" name="day" value="E Mërkurë"><label for="wednesday">E Mërkurë</label></div>
+                        <div class="choice"><input type="radio" id="thursday" name="day" value="E Enjte"><label for="thursday">E Enjte</label></div>
+                        <div class="choice"><input type="radio" id="friday" name="day" value="E Premte"><label for="friday">E Premte</label></div>
+                        <div class="choice"><input type="radio" id="saturday" name="day" value="E Shtunë"><label for="saturday">E Shtunë</label></div>
+                    </div>
+                </div>
+
+                <div class="booking-section">
+                    <h2>2. Zgjidhni orarin</h2>
+                    <div class="time-list">
+                        <div class="choice"><input required type="radio" id="time-9" name="time" value="09:00–10:00"><label for="time-9">09:00–10:00</label></div>
+                        <div class="choice"><input type="radio" id="time-10" name="time" value="10:00–11:00"><label for="time-10">10:00–11:00</label></div>
+                        <div class="choice"><input type="radio" id="time-11" name="time" value="11:00–12:00"><label for="time-11">11:00–12:00</label></div>
+                        <div class="choice"><input type="radio" id="time-12" name="time" value="12:00–13:00"><label for="time-12">12:00–13:00</label></div>
+                        <div class="choice"><input type="radio" id="time-13" name="time" value="13:00–14:00"><label for="time-13">13:00–14:00</label></div>
+                        <div class="choice"><input type="radio" id="time-14" name="time" value="14:00–15:00"><label for="time-14">14:00–15:00</label></div>
+                        <div class="choice"><input type="radio" id="time-15" name="time" value="15:00–16:00"><label for="time-15">15:00–16:00</label></div>
+                        <div class="choice"><input type="radio" id="time-16" name="time" value="16:00–17:00"><label for="time-16">16:00–17:00</label></div>
+                        <div class="choice"><input type="radio" id="time-17" name="time" value="17:00–18:00"><label for="time-17">17:00–18:00</label></div>
+                        <div class="choice"><input type="radio" id="time-18" name="time" value="18:00–19:00"><label for="time-18">18:00–19:00</label></div>
+                        <div class="choice"><input type="radio" id="time-19" name="time" value="19:00–20:00"><label for="time-19">19:00–20:00</label></div>
+                    </div>
+                </div>
+
+                <div class="booking-section">
+                    <h2>3. Të dhënat tuaja</h2>
+                    <div class="details">
+                        <div class="field"><label for="name">Emri dhe mbiemri</label><input required id="name" name="name" type="text"></div>
+                        <div class="field"><label for="phone">Telefoni</label><input required id="phone" name="phone" type="tel"></div>
+                        <div class="field full"><label for="message">Mesazhi (opsionale)</label><textarea id="message" name="message" placeholder="Na tregoni shkurt arsyen e vizitës..."></textarea></div>
+                    </div>
+                </div>
+
+                <button class="submit-button" type="submit">Konfirmo kërkesën për termin</button>
+                <p class="confirmation" id="confirmation" role="status"></p>
+            </form>
+            <iframe name="email-result" title="Rezultati i dërgimit të emailit" hidden></iframe>
+        </section>
+    </main>
+    <script>
+        const form = document.getElementById('booking-form');
+        const confirmation = document.getElementById('confirmation');
+        const timeInputs = [...document.querySelectorAll('input[name="time"]')];
+
+        document.querySelectorAll('input[name="day"]').forEach((dayInput) => {
+            dayInput.addEventListener('change', async () => {
+                timeInputs.forEach((input) => {
+                    input.disabled = false;
+                    input.parentElement.style.opacity = '1';
+                    input.parentElement.title = '';
+                });
+                let response;
+                try {
+                    response = await fetch(`/api/availability?day=${encodeURIComponent(dayInput.value)}`);
+                } catch (error) {
+                    confirmation.textContent = 'Serveri i rezervimeve nuk është aktiv. Hapeni faqen përmes serverit të Render, jo direkt si file.';
+                    confirmation.classList.add('visible');
+                    return;
+                }
+                if (!response.ok) {
+                    confirmation.textContent = 'Serveri nuk mundi t’i lexojë oraret. Kontrolloni konfigurimin e database.';
+                    confirmation.classList.add('visible');
+                    return;
+                }
+                const { bookedTimes } = await response.json();
+                timeInputs.forEach((input) => {
+                    if (bookedTimes.includes(input.value)) {
+                        input.checked = false;
+                        input.disabled = true;
+                        input.parentElement.style.opacity = '0.45';
+                        input.parentElement.title = 'Ky orar është i rezervuar';
+                    }
+                });
+            });
+        });
+
+        form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+            const formData = new FormData(form);
+            let response;
+            try {
+                response = await fetch('/api/bookings', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(Object.fromEntries(formData))
+                });
+            } catch (error) {
+                confirmation.textContent = 'Serveri i rezervimeve nuk është aktiv. Ju lutem provoni përsëri nga faqja online.';
+                confirmation.classList.add('visible');
+                return;
+            }
+            const result = await response.json();
+            confirmation.textContent = result.error || `${result.message} Do t'ju kontaktojmë së shpejti.`;
+            confirmation.classList.add('visible');
+            if (response.ok) {
+                form.querySelector('button').disabled = true;
+                form.querySelector('button').textContent = 'Kërkesa u dërgua';
+                const emailForm = document.createElement('form');
+                emailForm.action = 'https://formsubmit.co/diartident@gmail.com';
+                emailForm.method = 'POST';
+                emailForm.target = 'email-result';
+                [
+                    ['_subject', 'Kërkesë e re për termin - Diarti Dent'],
+                    ['_captcha', 'false'],
+                    ['_template', 'table'],
+                    ['day', formData.get('day')],
+                    ['time', formData.get('time')],
+                    ['name', formData.get('name')],
+                    ['phone', formData.get('phone')],
+                    ['message', formData.get('message') || '']
+                ].forEach(([name, value]) => {
+                    const input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = name;
+                    input.value = value;
+                    emailForm.appendChild(input);
+                });
+                document.body.appendChild(emailForm);
+                emailForm.submit();
+                emailForm.remove();
+            }
+            confirmation.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        });
+    </script>
+</body>
+</html>

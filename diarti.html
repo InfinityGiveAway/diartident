@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diarti Dent | Klinika Dentare Premium në Prishtinë</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #16b8a6;
+            --primary-dark: #087f82;
+            --coral: #ff7b72;
+            --gold: #ffc857;
+            --dark: #123b4a;
+            --text: #55717b;
+            --light: #f3fbfb;
+            --white: #ffffff;
+            --shadow: 0 18px 45px rgba(18, 59, 74, 0.1);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: 'DM Sans', sans-serif;
+            color: var(--text);
+            line-height: 1.7;
+            background-color: var(--light);
+        }
+        h1, h2, h3 { font-family: 'Playfair Display', serif; color: var(--dark); font-weight: 700; line-height: 1.15; }
+        
+        /* Navigation */
+        nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 17px 6%;
+            background: rgba(255,255,255,0.86);
+            backdrop-filter: blur(14px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 24px rgba(18, 59, 74, 0.08);
+        }
+        .logo { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 700; color: var(--dark); text-decoration: none; letter-spacing: -0.5px; }
+        .logo span { color: var(--primary); }
+        .nav-links a {
+            text-decoration: none;
+            color: var(--dark);
+            margin-left: 28px;
+            font-size: 14px;
+            font-weight: 600;
+            transition: color 0.3s, transform 0.3s;
+        }
+        .nav-links a:hover { color: var(--primary); transform: translateY(-2px); }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(115deg, rgba(7, 76, 91, 0.92), rgba(20, 184, 166, 0.48)), url('https://images.unsplash.com/photo-1629909613654-28e377c37b09?q=80&w=2070&auto=format&fit=crop') center/cover no-repeat;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: white;
+            padding: 100px 20px 60px;
+            position: relative;
+            overflow: hidden;
+        }
+        .hero::after {
+            content: '';
+            position: absolute;
+            width: 360px;
+            height: 360px;
+            border: 1px solid rgba(255,255,255,0.3);
+            border-radius: 50%;
+            right: -100px;
+            bottom: -150px;
+        }
+        .hero-content { max-width: 760px; position: relative; z-index: 1; }
+        .hero-content h1 { color: white; font-size: clamp(2.8rem, 6vw, 5rem); margin-bottom: 24px; text-shadow: 0 4px 20px rgba(0,0,0,0.14); }
+        .hero-content p { font-size: 1.15rem; font-weight: 400; max-width: 620px; margin: 0 auto 34px; color: rgba(255,255,255,0.9); }
+        .btn {
+            display: inline-block;
+            padding: 14px 32px;
+            background: linear-gradient(135deg, var(--coral), #ff9a62);
+            color: white;
+            text-decoration: none;
+            border-radius: 999px;
+            font-size: 14px;
+            font-weight: 700;
+            box-shadow: 0 10px 24px rgba(255, 123, 114, 0.35);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 14px 28px rgba(255, 123, 114, 0.45); }
+
+        /* About Section */
+        .section { padding: 105px 6%; }
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 75px;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .about-text h2 { font-size: 2.8rem; margin-bottom: 24px; }
+        .about-text h2::after { content: ''; display: block; width: 55px; height: 4px; background: var(--coral); border-radius: 4px; margin-top: 18px; }
+        .about-text p { margin-bottom: 18px; }
+        .about-img { position: relative; }
+        .about-img::before { content: ''; position: absolute; width: 100%; height: 100%; right: -16px; bottom: -16px; background: linear-gradient(135deg, var(--gold), var(--coral)); border-radius: 22px; z-index: 0; }
+        .about-img img { width: 100%; height: 370px; object-fit: cover; border-radius: 22px; position: relative; z-index: 1; box-shadow: var(--shadow); }
+
+        /* Team Section */
+        .team { background: white; }
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 26px;
+            max-width: 1000px;
+            margin: 40px auto 0;
+        }
+        .doctor-card {
+            text-align: center;
+            padding: 36px 30px;
+            border: 1px solid #e3f1f0;
+            border-radius: 20px;
+            background: linear-gradient(145deg, #fff, #f3fbfb);
+            box-shadow: 0 8px 20px rgba(18, 59, 74, 0.04);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .doctor-card:hover { transform: translateY(-8px); box-shadow: var(--shadow); }
+        .doctor-card h3 { margin-bottom: 5px; }
+        .doctor-card .title { color: var(--primary-dark); font-size: 13px; font-weight: 700; margin-bottom: 15px; display: block; }
+        
+        /* Services */
+        .services { background: linear-gradient(135deg, #e8fafa, #fff7ed); text-align: center; }
+        .services h2 { margin-bottom: 15px; }
+        .service-list {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 18px;
+            margin-top: 40px;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .service-item {
+            background: white;
+            padding: 23px 30px;
+            font-family: 'Playfair Display', serif;
+            font-size: 1.1rem;
+            color: var(--dark);
+            border: 1px solid rgba(22,184,166,0.12);
+            border-radius: 14px;
+            box-shadow: 0 8px 20px rgba(18, 59, 74, 0.06);
+            transition: transform 0.3s, color 0.3s;
+            flex: 1 1 200px;
+        }
+        .service-item:hover { transform: translateY(-5px); color: var(--primary-dark); }
+
+        /* Contact/Footer */
+        footer {
+            background: linear-gradient(135deg, #0d3443, #126b70);
+            color: #ccc;
+            padding: 72px 6% 22px;
+            text-align: center;
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            max-width: 1000px;
+            margin: 0 auto 40px;
+            text-align: left;
+        }
+        .footer-grid h4 { color: var(--gold); margin-bottom: 20px; font-family: 'Playfair Display', serif; font-size: 1.25rem; }
+        .footer-grid p { margin-bottom: 10px; font-weight: 300; font-size: 14px; }
+        .footer-bottom { border-top: 1px solid rgba(255,255,255,0.18); padding-top: 20px; font-size: 12px; color: rgba(255,255,255,0.55); }
+
+        @media (max-width: 768px) {
+            .section { padding: 75px 6%; }
+            .about-grid { grid-template-columns: 1fr; gap: 45px; }
+            .about-text h2 { font-size: 2.3rem; }
+            .about-img img { height: 290px; }
+            .nav-links { display: none; } /* Simplified for mobile */
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navigation -->
+    <nav>
+        <a href="#" class="logo">Diarti<span>Dent</span></a>
+        <div class="nav-links">
+            <a href="#about">Rreth Nesh</a>
+            <a href="#team">Ekspertët</a>
+            <a href="#services">Shërbimet</a>
+            <a href="#contact">Kontakt</a>
+        </div>
+    </nav>
+
+    <!-- Hero -->
+    <header class="hero">
+        <div class="hero-content">
+            <h1>Buzëqeshja që meriton</h1>
+            <p>Kujdes dentar premium në zemër të Prishtinës. Përvojë mbi 24 vjeçare, teknologji moderne dhe estetikë e përsosur.</p>
+            <a href="rezervo-termin.html" class="btn">Rezervo Termin</a>
+        </div>
+    </header>
+
+    <!-- About -->
+    <section id="about" class="section">
+        <div class="about-grid">
+            <div class="about-text">
+                <h2>Përsosmëri në Stomatologji</h2>
+                <p>Diarti Dent është një qendër dentare e themeluar mbi përvojën e gjatë dhe pasionin për estetikën. Udhëhequr nga Spec. Dr. Ilir Shala, ne kombinojmë mjekësinë orale me dizajnin e buzëqeshjes.</p>
+                <p>Qëllimi ynë është të ofrojmë trajtime të personalizuara, duke përdorur materiale cilësore si kurorat Zircon Multi Layer, për të siguruar rezultate natyrale dhe afatgjata.</p>
+            </div>
+            <div class="about-img">
+                <!-- Placeholder for clinic interior image -->
+                <img src="https://images.unsplash.com/photo-1588776814546-1ffcf47267a5?q=80&w=2070&auto=format&fit=crop" alt="Interiori i Klinikës Diarti Dent">
+            </div>
+        </div>
+    </section>
+
+    <!-- Team -->
+    <section id="team" class="section team">
+        <div style="text-align: center; max-width: 800px; margin: 0 auto;">
+            <h2>Ekspertiza Jonë</h2>
+            <p>Një ekip profesional i dedikuar shëndetit dhe bukurisë së buzëqeshjes tuaj.</p>
+        </div>
+        <div class="team-grid">
+            <div class="doctor-card">
+                <h3>Spec. Dr. Ilir Shala</h3>
+                <span class="title">Specialist në Paradontopati dhe Mjekësi Orale</span>
+                <p>Me mbi 24 vjet përvojë në fushën e stomatologjisë, Dr. Iliri është themeluesi dhe drejtuesi i klinikës.</p>
+            </div>
+            <div class="doctor-card">
+                <h3>Dr. Diart Ilir Shala</h3>
+                <span class="title">Stomatolog</span>
+                <p>Duke sjellë energji të re dhe njohuri bashkëkohore, Dr. Diarti është i specializuar në trajtimet estetike dhe restaurative.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Services (Without Prices, focus on Care) -->
+    <section id="services" class="section services">
+        <h2>Shërbimet Tona</h2>
+        <p style="margin-bottom: 20px;">Ofrojmë një gamë të plotë të kujdesit dentar.</p>
+        <div class="service-list">
+            <div class="service-item">Implante Dentare</div>
+            <div class="service-item">Kurora Zircon</div>
+            <div class="service-item">Ortodonci</div>
+            <div class="service-item">Paradontologji</div>
+            <div class="service-item">Estetikë Dentare</div>
+            <div class="service-item">Kirurgji Orale</div>
+        </div>
+        <p style="margin-top: 30px; font-size: 14px; color: #777;">Për çmimet dhe planin e trajtimit, ju lutem na kontaktoni direkt.</p>
+    </section>
+
+    <!-- Contact / Footer -->
+    <footer id="contact">
+        <div class="footer-grid">
+            <div>
+                <h4>Diarti Dent</h4>
+                <p>Kujdes dentar me përvojë dhe elegancë.</p>
+            </div>
+            <div>
+                <h4>Kontakt</h4>
+                <p>📍 Rr. Bulevardi Dëshmorët e Kombit, C2 H4 Nr.2, Ulpianë, Prishtinë</p>
+                <p>📞 044 418 848</p>
+                <p>✉️ diartident@gmail.com</p>
+            </div>
+            <div>
+                <h4>Orari</h4>
+                <p>E Hënë - E Shtunë</p>
+                <p>09:00 – 20:00</p>
+                <p style="margin-top: 10px; font-size: 12px;">*Orar i zgjatur gjatë Ramazanit</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            &copy; 2025 Diarti Dent. Të gjitha të drejtat e rezervuara.
+        </div>
+    </footer>
+
+</body>
+</html>
