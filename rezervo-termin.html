@@ -172,7 +172,6 @@
                 <button class="submit-button" type="submit">Konfirmo kërkesën për termin</button>
                 <p class="confirmation" id="confirmation" role="status"></p>
             </form>
-            <iframe name="email-result" title="Rezultati i dërgimit të emailit" hidden></iframe>
         </section>
     </main>
     <script>
@@ -265,33 +264,9 @@
             const result = await response.json();
             confirmation.textContent = result.error || `${result.message} Do t'ju kontaktojmë së shpejti.`;
             confirmation.classList.add('visible');
-            if (response.ok) {
+            if (response.ok && result.emailSent !== false) {
                 form.querySelector('button').disabled = true;
                 form.querySelector('button').textContent = 'Kërkesa u dërgua';
-                const emailForm = document.createElement('form');
-                emailForm.action = 'https://formsubmit.co/diartident@gmail.com';
-                emailForm.method = 'POST';
-                emailForm.target = 'email-result';
-                [
-                    ['_subject', 'Kërkesë e re për termin - Diarti Dent'],
-                    ['_captcha', 'false'],
-                    ['_template', 'table'],
-                    ['day', formData.get('day')],
-                    ['date', formData.get('date')],
-                    ['time', formData.get('time')],
-                    ['name', formData.get('name')],
-                    ['phone', formData.get('phone')],
-                    ['message', formData.get('message') || '']
-                ].forEach(([name, value]) => {
-                    const input = document.createElement('input');
-                    input.type = 'hidden';
-                    input.name = name;
-                    input.value = value;
-                    emailForm.appendChild(input);
-                });
-                document.body.appendChild(emailForm);
-                emailForm.submit();
-                emailForm.remove();
             }
             confirmation.scrollIntoView({ behavior: 'smooth', block: 'center' });
         });

@@ -8,6 +8,7 @@ const pool = process.env.DATABASE_URL
     ? new Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } })
     : null;
 const localBookings = new Set();
+const emailRecipient = process.env.EMAIL_TO || 'diartident@gmail.com';
 
 const validDays = new Set(['E Hënë', 'E Martë', 'E Mërkurë', 'E Enjte', 'E Premte', 'E Shtunë']);
 const dayNames = ['E Diel', 'E Hënë', 'E Martë', 'E Mërkurë', 'E Enjte', 'E Premte', 'E Shtunë'];
@@ -47,6 +48,32 @@ async function initializeDatabase() {
     await pool.query('CREATE UNIQUE INDEX IF NOT EXISTS bookings_date_time_key ON bookings (booking_date, time)');
 }
 
+async function sendBookingEmail({ day, date, time, name, phone, message }) {
+    const emailResponse = await fetch(`https://formsubmit.co/${encodeURIComponent(emailRecipient)}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded',
+            Accept: 'application/json'
+        },
+        body: new URLSearchParams({
+            _subject: 'Kërkesë e re për termin - Diarti Dent',
+            _captcha: 'false',
+            _template: 'table',
+            day,
+            date,
+            time,
+            name,
+            phone,
+            message: message || ''
+        })
+    });
+
+    if (!emailResponse.ok) {
+        const details = await emailResponse.text();
+        throw new Error(`FormSubmit returned ${emailResponse.status}: ${details.slice(0, 300)}`);
+    }
+}
+
 app.get('/api/availability', async (request, response) => {
     const { day, date } = request.query;
     if (!validDays.has(day) || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
@@ -82,13 +109,23 @@ app.post('/api/bookings', async (request, response) => {
                 return response.status(409).json({ error: 'Ky orar sapo u rezervua nga një person tjetër.' });
             }
             localBookings.add(bookingKey);
-            return response.status(201).json({ message: 'Rezervimi u ruajt me sukses.' });
+        } else {
+            await pool.query(
+                'INSERT INTO bookings (day, booking_date, time, name, phone, message) VALUES ($1, $2, $3, $4, $5, $6)',
+                [day, date, time, name.trim(), phone.trim(), message.trim()]
+            );
         }
-        await pool.query(
-            'INSERT INTO bookings (day, booking_date, time, name, phone, message) VALUES ($1, $2, $3, $4, $5, $6)',
-            [day, date, time, name.trim(), phone.trim(), message.trim()]
-        );
-        response.status(201).json({ message: 'Rezervimi u ruajt me sukses.' });
+
+        try {
+            await sendBookingEmail({ day, date, time, name: name.trim(), phone: phone.trim(), message: message.trim() });
+            response.status(201).json({ message: 'Rezervimi u ruajt dhe emaili u dërgua me sukses.' });
+        } catch (emailError) {
+            console.error('Booking email failed:', emailError);
+            response.status(201).json({
+                message: 'Rezervimi u ruajt, por emaili nuk u dërgua. Kontrolloni aktivizimin e FormSubmit.',
+                emailSent: false
+            });
+        }
     } catch (error) {
         if (error.code === '23505') {
             return response.status(409).json({ error: 'Ky orar sapo u rezervua nga një person tjetër.' });

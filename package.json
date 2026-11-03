@@ -4,6 +4,9 @@
   "private": true,
   "description": "Diarti Dent appointment booking backend",
   "main": "server.js",
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
     "start": "node server.js"
   },
