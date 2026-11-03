@@ -49,7 +49,7 @@ async function initializeDatabase() {
 }
 
 async function sendBookingEmail({ day, date, time, name, phone, message }) {
-    const emailResponse = await fetch(`https://formsubmit.co/${encodeURIComponent(emailRecipient)}`, {
+    const emailResponse = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(emailRecipient)}`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/x-www-form-urlencoded',
@@ -68,9 +68,16 @@ async function sendBookingEmail({ day, date, time, name, phone, message }) {
         })
     });
 
-    if (!emailResponse.ok) {
-        const details = await emailResponse.text();
-        throw new Error(`FormSubmit returned ${emailResponse.status}: ${details.slice(0, 300)}`);
+    const details = await emailResponse.text();
+    let result;
+    try {
+        result = JSON.parse(details);
+    } catch (error) {
+        throw new Error(`FormSubmit returned invalid JSON (${emailResponse.status}): ${details.slice(0, 300)}`);
+    }
+
+    if (!emailResponse.ok || result.success !== true && result.success !== 'true') {
+        throw new Error(`FormSubmit rejected the email: ${result.message || details.slice(0, 300)}`);
     }
 }
 
@@ -122,7 +129,7 @@ app.post('/api/bookings', async (request, response) => {
         } catch (emailError) {
             console.error('Booking email failed:', emailError);
             response.status(201).json({
-                message: 'Rezervimi u ruajt, por emaili nuk u dërgua. Kontrolloni aktivizimin e FormSubmit.',
+                message: 'Rezervimi u ruajt, por emaili nuk u dërgua. Në Render kontrolloni EMAIL_TO dhe aktivizimin e FormSubmit.',
                 emailSent: false
             });
         }
