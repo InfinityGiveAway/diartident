@@ -140,14 +140,7 @@
             <form id="booking-form">
                 <div class="booking-section">
                     <h2>1. Zgjidhni ditën</h2>
-                    <div class="day-list">
-                        <div class="choice"><input required type="radio" id="monday" name="day" value="E Hënë"><label for="monday">E Hënë</label></div>
-                        <div class="choice"><input type="radio" id="tuesday" name="day" value="E Martë"><label for="tuesday">E Martë</label></div>
-                        <div class="choice"><input type="radio" id="wednesday" name="day" value="E Mërkurë"><label for="wednesday">E Mërkurë</label></div>
-                        <div class="choice"><input type="radio" id="thursday" name="day" value="E Enjte"><label for="thursday">E Enjte</label></div>
-                        <div class="choice"><input type="radio" id="friday" name="day" value="E Premte"><label for="friday">E Premte</label></div>
-                        <div class="choice"><input type="radio" id="saturday" name="day" value="E Shtunë"><label for="saturday">E Shtunë</label></div>
-                    </div>
+                    <div class="day-list" id="day-list"></div>
                 </div>
 
                 <div class="booking-section">
@@ -186,6 +179,34 @@
         const form = document.getElementById('booking-form');
         const confirmation = document.getElementById('confirmation');
         const timeInputs = [...document.querySelectorAll('input[name="time"]')];
+        const dayList = document.getElementById('day-list');
+        const dayNames = ['E Diel', 'E Hënë', 'E Martë', 'E Mërkurë', 'E Enjte', 'E Premte', 'E Shtunë'];
+
+        function formatDate(date) {
+            return date.toISOString().slice(0, 10);
+        }
+
+        function createAvailableDays() {
+            const today = new Date();
+            const currentDay = today.getDay();
+            const monday = new Date(today);
+            monday.setDate(today.getDate() - (currentDay === 0 ? -1 : currentDay - 1));
+            for (let offset = currentDay === 0 ? 0 : currentDay - 1; offset <= 5; offset += 1) {
+                const date = new Date(monday);
+                date.setDate(monday.getDate() + offset);
+                const dayName = dayNames[date.getDay()];
+                const id = `day-${formatDate(date)}`;
+                const choice = document.createElement('div');
+                choice.className = 'choice';
+                choice.innerHTML = `<input required type="radio" id="${id}" name="day" value="${dayName}" data-date="${formatDate(date)}"><label for="${id}">${dayName}<br><small>${date.toLocaleDateString('sq-AL', { day: '2-digit', month: '2-digit' })}</small></label>`;
+                dayList.appendChild(choice);
+            }
+            if (!dayList.children.length) {
+                dayList.innerHTML = '<p>Rezervimet për këtë javë kanë përfunduar. Ju lutem provoni javën tjetër.</p>';
+            }
+        }
+
+        createAvailableDays();
 
         document.querySelectorAll('input[name="day"]').forEach((dayInput) => {
             dayInput.addEventListener('change', async () => {
@@ -196,7 +217,7 @@
                 });
                 let response;
                 try {
-                    response = await fetch(`/api/availability?day=${encodeURIComponent(dayInput.value)}`);
+                    response = await fetch(`/api/availability?day=${encodeURIComponent(dayInput.value)}&date=${dayInput.dataset.date}`);
                 } catch (error) {
                     confirmation.textContent = 'Serveri i rezervimeve nuk është aktiv. Hapeni faqen përmes serverit të Render, jo direkt si file.';
                     confirmation.classList.add('visible');
@@ -209,11 +230,16 @@
                 }
                 const { bookedTimes } = await response.json();
                 timeInputs.forEach((input) => {
-                    if (bookedTimes.includes(input.value)) {
+                    const selectedDate = new Date(`${dayInput.dataset.date}T00:00:00`);
+                    const now = new Date();
+                    const isToday = selectedDate.toDateString() === now.toDateString();
+                    const slotEnd = Number(input.value.slice(6, 8));
+                    const isPast = isToday && slotEnd <= now.getHours();
+                    if (bookedTimes.includes(input.value) || isPast) {
                         input.checked = false;
                         input.disabled = true;
                         input.parentElement.style.opacity = '0.45';
-                        input.parentElement.title = 'Ky orar është i rezervuar';
+                        input.parentElement.title = isPast ? 'Ky orar ka kaluar' : 'Ky orar është i rezervuar';
                     }
                 });
             });
@@ -222,6 +248,8 @@
         form.addEventListener('submit', async (event) => {
             event.preventDefault();
             const formData = new FormData(form);
+            const selectedDay = form.querySelector('input[name="day"]:checked');
+            formData.set('date', selectedDay.dataset.date);
             let response;
             try {
                 response = await fetch('/api/bookings', {
@@ -249,6 +277,7 @@
                     ['_captcha', 'false'],
                     ['_template', 'table'],
                     ['day', formData.get('day')],
+                    ['date', formData.get('date')],
                     ['time', formData.get('time')],
                     ['name', formData.get('name')],
                     ['phone', formData.get('phone')],

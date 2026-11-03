@@ -10,6 +10,7 @@ const pool = process.env.DATABASE_URL
 const localBookings = new Set();
 
 const validDays = new Set(['E Hënë', 'E Martë', 'E Mërkurë', 'E Enjte', 'E Premte', 'E Shtunë']);
+const dayNames = ['E Diel', 'E Hënë', 'E Martë', 'E Mërkurë', 'E Enjte', 'E Premte', 'E Shtunë'];
 const validTimes = new Set(Array.from({ length: 11 }, (_, index) => {
     const start = String(index + 9).padStart(2, '0');
     const end = String(index + 10).padStart(2, '0');
@@ -32,6 +33,7 @@ async function initializeDatabase() {
         CREATE TABLE IF NOT EXISTS bookings (
             id SERIAL PRIMARY KEY,
             day TEXT NOT NULL,
+            booking_date DATE,
             time TEXT NOT NULL,
             name TEXT NOT NULL,
             phone TEXT NOT NULL,
@@ -40,11 +42,14 @@ async function initializeDatabase() {
             UNIQUE (day, time)
         )
     `);
+    await pool.query('ALTER TABLE bookings ADD COLUMN IF NOT EXISTS booking_date DATE');
+    await pool.query('ALTER TABLE bookings DROP CONSTRAINT IF EXISTS bookings_day_time_key');
+    await pool.query('CREATE UNIQUE INDEX IF NOT EXISTS bookings_date_time_key ON bookings (booking_date, time)');
 }
 
 app.get('/api/availability', async (request, response) => {
-    const day = request.query.day;
-    if (!validDays.has(day)) {
+    const { day, date } = request.query;
+    if (!validDays.has(day) || !/^\d{4}-\d{2}-\d{2}$/.test(date)) {
         return response.status(400).json({ error: 'Ditë e pavlefshme.' });
     }
 
@@ -52,11 +57,11 @@ app.get('/api/availability', async (request, response) => {
         if (!pool) {
             return response.json({
                 bookedTimes: [...localBookings]
-                    .filter((booking) => booking.startsWith(`${day}|`))
+                    .filter((booking) => booking.startsWith(`${date}|`))
                     .map((booking) => booking.split('|')[1])
             });
         }
-        const result = await pool.query('SELECT time FROM bookings WHERE day = $1', [day]);
+        const result = await pool.query('SELECT time FROM bookings WHERE booking_date = $1', [date]);
         response.json({ bookedTimes: result.rows.map((row) => row.time) });
     } catch (error) {
         console.error('Availability lookup failed:', error);
@@ -65,14 +70,14 @@ app.get('/api/availability', async (request, response) => {
 });
 
 app.post('/api/bookings', async (request, response) => {
-    const { day, time, name, phone, message = '' } = request.body;
-    if (!validDays.has(day) || !validTimes.has(time) || !name?.trim() || !phone?.trim()) {
+    const { day, date, time, name, phone, message = '' } = request.body;
+    if (!validDays.has(day) || !/^\d{4}-\d{2}-\d{2}$/.test(date) || !validTimes.has(time) || !name?.trim() || !phone?.trim()) {
         return response.status(400).json({ error: 'Ju lutem plotësoni të dhënat e kërkuara.' });
     }
 
     try {
         if (!pool) {
-            const bookingKey = `${day}|${time}`;
+            const bookingKey = `${date}|${time}`;
             if (localBookings.has(bookingKey)) {
                 return response.status(409).json({ error: 'Ky orar sapo u rezervua nga një person tjetër.' });
             }
@@ -80,8 +85,8 @@ app.post('/api/bookings', async (request, response) => {
             return response.status(201).json({ message: 'Rezervimi u ruajt me sukses.' });
         }
         await pool.query(
-            'INSERT INTO bookings (day, time, name, phone, message) VALUES ($1, $2, $3, $4, $5)',
-            [day, time, name.trim(), phone.trim(), message.trim()]
+            'INSERT INTO bookings (day, booking_date, time, name, phone, message) VALUES ($1, $2, $3, $4, $5, $6)',
+            [day, date, time, name.trim(), phone.trim(), message.trim()]
         );
         response.status(201).json({ message: 'Rezervimi u ruajt me sukses.' });
     } catch (error) {
