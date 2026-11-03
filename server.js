@@ -52,10 +52,10 @@ async function sendBookingEmail({ day, date, time, name, phone, message }) {
     const emailResponse = await fetch(`https://formsubmit.co/ajax/${encodeURIComponent(emailRecipient)}`, {
         method: 'POST',
         headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
+            'Content-Type': 'application/json',
             Accept: 'application/json'
         },
-        body: new URLSearchParams({
+        body: JSON.stringify({
             _subject: 'Kërkesë e re për termin - Diarti Dent',
             _captcha: 'false',
             _template: 'table',
@@ -129,7 +129,7 @@ app.post('/api/bookings', async (request, response) => {
         } catch (emailError) {
             console.error('Booking email failed:', emailError);
             response.status(201).json({
-                message: 'Rezervimi u ruajt, por emaili nuk u dërgua. Në Render kontrolloni EMAIL_TO dhe aktivizimin e FormSubmit.',
+                message: `Rezervimi u ruajt, por emaili nuk u dërgua: ${emailError.message}`,
                 emailSent: false
             });
         }
