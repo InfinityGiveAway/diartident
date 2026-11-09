@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shërbimet | Diarti Dent</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #16b8a6; --primary-dark: #087f82; --coral: #ff7b72; --dark: #123b4a; --text: #55717b; --light: #f3fbfb; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { min-height: 100vh; padding: 32px 6%; color: var(--text); background: linear-gradient(135deg, #e8fafa, #fff7ed); font-family: 'DM Sans', sans-serif; line-height: 1.7; }
+        main { max-width: 980px; margin: 0 auto; }
+        .back-link { display: inline-block; margin-bottom: 28px; color: var(--primary-dark); font-weight: 700; text-decoration: none; }
+        .page-card { padding: clamp(28px, 6vw, 60px); background: white; border: 1px solid rgba(22,184,166,.15); border-radius: 26px; box-shadow: 0 20px 55px rgba(18,59,74,.12); }
+        h1, h2 { color: var(--dark); font-family: 'Playfair Display', serif; line-height: 1.2; }
+        h1 { margin-bottom: 12px; font-size: clamp(2.3rem, 6vw, 3.8rem); }
+        .intro { max-width: 680px; margin-bottom: 34px; }
+        .service-list { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+        .service { padding: 22px; border: 1px solid #e3f1f0; border-radius: 16px; background: linear-gradient(145deg, #fff, var(--light)); }
+        .service h2 { margin-bottom: 7px; font-size: 1.25rem; }
+        .appointment { display: inline-block; margin-top: 30px; padding: 13px 25px; border-radius: 999px; background: linear-gradient(135deg, var(--coral), #ff9a62); color: white; font-weight: 700; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <main>
+        <a class="back-link" href="diarti.html">← Kthehu te faqja kryesore</a>
+        <section class="page-card">
+            <h1>Shërbimet tona</h1>
+            <p class="intro">Ofrojmë kujdes dentar të personalizuar, me fokus në shëndetin oral, funksionin dhe estetikën e buzëqeshjes.</p>
+            <div class="service-list">
+                <article class="service"><h2>Implante dentare</h2><p>Zgjidhje moderne për zëvendësimin e dhëmbëve që mungojnë.</p></article>
+                <article class="service"><h2>Kurora Zircon</h2><p>Restaurime estetike dhe funksionale me materiale cilësore.</p></article>
+                <article class="service"><h2>Ortodonci</h2><p>Kujdes për rreshtimin e dhëmbëve dhe harmoninë e kafshimit.</p></article>
+                <article class="service"><h2>Paradontologji</h2><p>Trajtime për shëndetin e mishrave dhe indeve mbështetëse.</p></article>
+                <article class="service"><h2>Estetikë dentare</h2><p>Trajtime të përshtatura për një buzëqeshje natyrale.</p></article>
+                <article class="service"><h2>Kirurgji orale</h2><p>Ndërhyrje orale të planifikuara sipas nevojave tuaja.</p></article>
+            </div>
+            <a class="appointment" href="rezervo-termin.html">Rezervo termin</a>
+        </section>
+    </main>
+</body>
+</html>

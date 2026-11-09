@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rreth Nesh | Diarti Dent</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #16b8a6; --primary-dark: #087f82; --coral: #ff7b72; --dark: #123b4a; --text: #55717b; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { min-height: 100vh; padding: 32px 6%; color: var(--text); background: linear-gradient(135deg, #e8fafa, #fff7ed); font-family: 'DM Sans', sans-serif; line-height: 1.7; }
+        main { max-width: 900px; margin: 0 auto; }
+        .back-link { display: inline-block; margin-bottom: 28px; color: var(--primary-dark); font-weight: 700; text-decoration: none; }
+        .page-card { padding: clamp(28px, 6vw, 60px); background: white; border: 1px solid rgba(22,184,166,.15); border-radius: 26px; box-shadow: 0 20px 55px rgba(18,59,74,.12); }
+        h1, h2 { color: var(--dark); font-family: 'Playfair Display', serif; line-height: 1.2; }
+        h1 { margin-bottom: 18px; font-size: clamp(2.3rem, 6vw, 3.8rem); }
+        h2 { margin: 30px 0 10px; font-size: 1.6rem; }
+        .lead { margin-bottom: 16px; font-size: 1.1rem; }
+        .team { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-top: 20px; }
+        .doctor { padding: 22px; border: 1px solid #e3f1f0; border-radius: 16px; background: #f7fcfc; }
+        .doctor h2 { margin: 0 0 5px; font-size: 1.25rem; }
+        .title { display: block; margin-bottom: 10px; color: var(--primary-dark); font-size: .9rem; font-weight: 700; }
+        .appointment { display: inline-block; margin-top: 30px; padding: 13px 25px; border-radius: 999px; background: linear-gradient(135deg, var(--coral), #ff9a62); color: white; font-weight: 700; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <main>
+        <a class="back-link" href="diarti.html">← Kthehu te faqja kryesore</a>
+        <section class="page-card">
+            <h1>Rreth Diarti Dent</h1>
+            <p class="lead">Diarti Dent është një qendër dentare e themeluar mbi përvojën e gjatë dhe pasionin për estetikën.</p>
+            <p>Udhëhequr nga Spec. Dr. Ilir Shala, kombinojmë mjekësinë orale me kujdes të personalizuar dhe teknologji moderne. Qëllimi ynë është të ofrojmë trajtime cilësore, me rezultate natyrale dhe afatgjata.</p>
+            <h2>Ekipi ynë</h2>
+            <div class="team">
+                <article class="doctor">
+                    <h2>Spec. Dr. Ilir Shala</h2>
+                    <span class="title">Specialist në Paradontopati dhe Mjekësi Orale</span>
+                    <p>Me mbi 24 vjet përvojë në stomatologji, është themeluesi dhe drejtuesi i klinikës.</p>
+                </article>
+                <article class="doctor">
+                    <h2>Dr. Diart Ilir Shala</h2>
+                    <span class="title">Stomatolog</span>
+                    <p>I specializuar në trajtimet estetike dhe restaurative, sjell njohuri bashkëkohore dhe energji të re në ekip.</p>
+                </article>
+            </div>
+            <a class="appointment" href="rezervo-termin.html">Rezervo termin</a>
+        </section>
+    </main>
+</body>
+</html>

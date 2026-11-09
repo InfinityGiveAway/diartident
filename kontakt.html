@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="sq">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kontakt dhe Lokacioni | Diarti Dent</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #16b8a6; --primary-dark: #087f82; --coral: #ff7b72; --dark: #123b4a; --text: #55717b; }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body { min-height: 100vh; padding: 32px 6%; color: var(--text); background: linear-gradient(135deg, #e8fafa, #fff7ed); font-family: 'DM Sans', sans-serif; line-height: 1.7; }
+        main { max-width: 900px; margin: 0 auto; }
+        .back-link { display: inline-block; margin-bottom: 28px; color: var(--primary-dark); font-weight: 700; text-decoration: none; }
+        .page-card { padding: clamp(28px, 6vw, 60px); background: white; border: 1px solid rgba(22,184,166,.15); border-radius: 26px; box-shadow: 0 20px 55px rgba(18,59,74,.12); }
+        h1, h2 { color: var(--dark); font-family: 'Playfair Display', serif; line-height: 1.2; }
+        h1 { margin-bottom: 12px; font-size: clamp(2.3rem, 6vw, 3.8rem); }
+        .intro { margin-bottom: 30px; }
+        .contact-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 16px; }
+        .contact-item { padding: 22px; border: 1px solid #e3f1f0; border-radius: 16px; background: #f7fcfc; }
+        .contact-item h2 { margin-bottom: 9px; font-size: 1.25rem; }
+        .contact-item p + p { margin-top: 5px; }
+        .contact-item a { color: var(--primary-dark); text-decoration: none; font-weight: 600; }
+        .appointment { display: inline-block; margin-top: 30px; padding: 13px 25px; border-radius: 999px; background: linear-gradient(135deg, var(--coral), #ff9a62); color: white; font-weight: 700; text-decoration: none; }
+    </style>
+</head>
+<body>
+    <main>
+        <a class="back-link" href="diarti.html">← Kthehu te faqja kryesore</a>
+        <section class="page-card">
+            <h1>Kontakt &amp; lokacioni</h1>
+            <p class="intro">Na kontaktoni për informata ose për të caktuar vizitën tuaj. Ju mirëpresim në klinikën tonë në Prishtinë.</p>
+            <div class="contact-grid">
+                <section class="contact-item">
+                    <h2>Adresa</h2>
+                    <p>Rr. Bulevardi Dëshmorët e Kombit, C2 H4 Nr.2, Ulpianë, Prishtinë</p>
+                </section>
+                <section class="contact-item">
+                    <h2>Na kontaktoni</h2>
+                    <p>Telefoni: <a href="tel:+38344418848">044 418 848</a></p>
+                    <p>Email: <a href="mailto:diartident@gmail.com">diartident@gmail.com</a></p>
+                </section>
+                <section class="contact-item">
+                    <h2>Orari</h2>
+                    <p>E Hënë – E Shtunë</p>
+                    <p>09:00 – 20:00</p>
+                    <p><small>Orar i zgjatur gjatë Ramazanit</small></p>
+                </section>
+            </div>
+            <a class="appointment" href="rezervo-termin.html">Rezervo termin</a>
+        </section>
+    </main>
+</body>
+</html>
